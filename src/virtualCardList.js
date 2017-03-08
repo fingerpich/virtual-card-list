@@ -60,3 +60,4 @@ class VirtualCardList {
         };
     }
 }
+export default VirtualCardList;
