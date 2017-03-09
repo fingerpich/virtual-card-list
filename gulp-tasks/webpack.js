@@ -1,12 +1,26 @@
 var gulp = require('gulp');
 var webpack = require('webpack-stream');
 var path = require('path');
+var browserSync = require('browser-sync').create();
 
 var paths = {
     root: './',
     dist: './dist/',
     src:  './src/'
 };
+
+gulp.task('watch:vanila', function () {
+    browserSync.init({
+        open: true,
+        port: 8081,
+        server: {
+            baseDir: "./test",
+        }
+    });
+
+    // gulp.watch("app/**/*.js").on('change', browserSync.reload);
+    gulp.watch(paths.src+'**/*.js',["js:vanilla"]).on('change', browserSync.reload);
+});
 
 gulp.task('js:vanilla', function () {
     return gulp.src(path.join(paths.src + 'vanilaVirtualList.js'))
@@ -21,12 +35,12 @@ gulp.task('js:vanilla', function () {
 });
 
 gulp.task('js:react', function () {
-    return gulp.src(path.join(paths.src, 'Cleave.react.js'))
+    return gulp.src(path.join(paths.src, 'virtualList.react.js'))
         .pipe(webpack({
             output:    {
-                library:       'Cleave',
+                library:       'virtualList',
                 libraryTarget: 'umd',
-                filename:      'cleave-react.js'
+                filename:      'virtualList-react.js'
             },
             module:    {
                 loaders: [
