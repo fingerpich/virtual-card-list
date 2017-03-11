@@ -1,4 +1,4 @@
-import VirtualCardList from './virtualCardList';
+import VirtualCardList from '../virtualCardList';
 
 class VanilaVirtualList{
     constructor(element,options){

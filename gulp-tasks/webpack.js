@@ -10,11 +10,12 @@ var paths = {
 };
 
 gulp.task('watch:vanila', function () {
+    gulp.src("./test/index.html").pipe(gulp.dest(paths.dist+"vanila/"));
     browserSync.init({
         open: true,
         port: 8081,
         server: {
-            baseDir: "./test",
+            baseDir: "./dist/vanila",
         }
     });
 
@@ -23,15 +24,15 @@ gulp.task('watch:vanila', function () {
 });
 
 gulp.task('js:vanilla', function () {
-    return gulp.src(path.join(paths.src + 'vanilaVirtualList.js'))
+    return gulp.src(path.join(paths.src + 'vanila/vanilaVirtualList.js'))
         .pipe(webpack({
             output: {
                 library:       'virtualList',
                 libraryTarget: 'umd',
-                filename:      'virtual-list.js'
+                filename:      'vanilaVirtualList.js'
             }
         }))
-        .pipe(gulp.dest(paths.dist));
+        .pipe(gulp.dest(paths.dist+"vanila/"));
 });
 
 gulp.task('js:react', function () {
