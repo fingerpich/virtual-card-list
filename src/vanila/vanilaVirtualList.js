@@ -1,5 +1,4 @@
-import VirtualCardList from '../virtualCardList';
-
+// import VirtualCardList from '../virtualCardList';
 class VanilaVirtualList{
     constructor(element,options){
         const scrollContainer = document.createElement('div');
@@ -11,3 +10,4 @@ class VanilaVirtualList{
         scrollContainer.appendChild(cardsContainer);
     }
 }
+export default VanilaVirtualList;

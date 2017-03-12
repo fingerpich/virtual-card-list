@@ -8,9 +8,9 @@ var paths = {
     dist: './dist/',
     src:  './src/'
 };
-
+gulp.task('start:vanila', ['js:vanilla','watch:vanila']);
 gulp.task('watch:vanila', function () {
-    gulp.src("./test/index.html").pipe(gulp.dest(paths.dist+"vanila/"));
+    gulp.src(paths.src+"vanila/index.html").pipe(gulp.dest(paths.dist+"vanila/"));
     browserSync.init({
         open: true,
         port: 8081,
@@ -27,9 +27,20 @@ gulp.task('js:vanilla', function () {
     return gulp.src(path.join(paths.src + 'vanila/vanilaVirtualList.js'))
         .pipe(webpack({
             output: {
-                library:       'virtualList',
+                library:       'VanilaVirtualList',
                 libraryTarget: 'umd',
                 filename:      'vanilaVirtualList.js'
+            },
+            // debug: true,
+            devtool: 'source-map',
+            module: {
+                loaders: [
+                    {
+                        test: /\.js$/,
+                        exclude: /(node_modules|bower_components)/,
+                        loader: 'babel-loader?presets[]=env'
+                    }
+                ]
             }
         }))
         .pipe(gulp.dest(paths.dist+"vanila/"));

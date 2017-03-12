@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "gulp test",
-    "start": "gulp watch:vanila",
+    "start": "gulp start:vanila",
     "build": "gulp js:vanilla"
   },
   "repository": {
@@ -31,6 +31,7 @@
     "babel-core": "^6.23.1",
     "babel-eslint": "^7.1.1",
     "babel-loader": "^6.4.0",
+    "babel-preset-env": "^1.2.1",
     "babel-preset-es2015": "^6.22.0",
     "babel-preset-react": "^6.23.0",
     "babel-preset-stage-0": "^6.5.0",
@@ -58,7 +59,7 @@
     "underscore": "^1.8.3",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.7.0",
-    "webpack": "^1.13.1",
+    "webpack": "^1.14.0",
     "webpack-stream": "^3.2.0"
   },
   "dependencies": {
