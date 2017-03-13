@@ -24,11 +24,11 @@ gulp.task('watch:vanila', function () {
 });
 
 gulp.task('js:vanilla', function () {
-    return gulp.src(path.join(paths.src + 'vanila/vanilaVirtualList.js'))
+    return gulp.src(path.join(paths.src + 'vanila/entry.js'))
         .pipe(webpack({
             output: {
                 library:       'VanilaVirtualList',
-                libraryTarget: 'umd',
+                libraryTarget: 'this',
                 filename:      'vanilaVirtualList.js'
             },
             // debug: true,
