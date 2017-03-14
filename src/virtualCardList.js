@@ -50,6 +50,7 @@ class VirtualCardList {
         this.calculate();
     }
 
+    elementPosition=[];
     /**
      * calculate and find every elements css
      */
