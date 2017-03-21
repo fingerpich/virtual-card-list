@@ -14,6 +14,8 @@ class VanilaVirtualList{
         this.cardsContainer = document.createElement('div');
         this.cardsContainer.style.cssText="position:absolute;";
         this.scrollContainer.appendChild(this.cardsContainer);
+
+        this.startIndex=0;
     }
     //this method could override
     cardGenerator({content,className}){
@@ -23,7 +25,7 @@ class VanilaVirtualList{
         card.style.cssText="position:absolute;width:50px;height:50px;border:1px solid silver";
         this.cardsContainer.appendChild(card);
     }
-    startIndex=0;
+
     generateCards(){
         let i=this.startIndex;
         while(this.needToLoadMore(i)) {

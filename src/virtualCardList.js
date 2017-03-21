@@ -5,7 +5,13 @@ class VirtualCardList {
     /**
      * constructor
      */
-    constructor() {
+    constructor({layout, size, startIndex}) {
+        this.layout=layout||"row";
+        this.size=size||[600,600];
+        this.childMinWidth=40;
+        this.childAvgSize=60;
+        this.startIndex=startIndex||0;
+        this.maxColumn=5;
     }
 
     /**
@@ -50,15 +56,55 @@ class VirtualCardList {
         this.calculate();
     }
 
-    elementPosition=[];
+    elementPosition={};
     /**
      * calculate and find every elements css
      */
-    calculate() {
-        return {
-            scrollTop:2,
-            elementsPosition:[]
-        };
+    calculate({getElementHeight}) {
+        const col=Math.min(this.maxColumn,Math.floor(this.size/this.childMinWidth));
+        const width=this.size[0];
+        const elementWidth=width/col;
+        const colsElements=[];
+        const colsTop=this.getColsTop(col);
+        let index=this.startIndex;
+        const elPos=this.elementPosition;
+        let smallestCol=this.getSmallestCol(colsTop);
+        while(this.needToLoadMore(colsTop[smallestCol])){
+            if(!elPos[index])elPos[index]={};
+            const eliPos=elPos[index];
+
+            eliPos.top = colsTop[smallestCol];
+            eliPos.left = smallestCol * elementWidth;
+            eliPos.width = elementWidth;
+            eliPos.height = getElementHeight?getElementHeight(index):this.childAvgSize;
+            colsTop[smallestCol]+=eliPos.height;
+            index++;
+            smallestCol=this.getSmallestCol(colsTop);
+        }
+        return this.elementPosition;
+    }
+    getSmallestCol(colsTop){
+        let min=0;
+        let minTop=213213213251216510;
+        for(let i=0; i<colsTop.length; i++){
+            if(colsTop<minTop)min=i;
+        }
+        return i;
+    }
+    needToLoadMore(mintop){
+        if(mintop-this.scrollTop<20){
+            return true;
+        }
+        return false;
+    }
+
+    getColsTop(columnCount) {
+        const tops=[];
+        for(let i=0;i<columnCount;i++){
+            // tops.push(-Math.random()*100);
+            tops.push(0);
+        }
+        return tops;
     }
 }
 export default VirtualCardList;
