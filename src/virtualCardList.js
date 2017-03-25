@@ -14,6 +14,20 @@ class VirtualCardList {
         this.maxColumn=5;
     }
 
+    cardList=[];
+    requireList=[];
+
+    recreateCardLists() {
+        const columnCount=Math.min(this.maxColumn,Math.floor(this.size/this.childMinWidth));
+        for(var i=0;i<columnCount; i++){
+            this.cardList[i] = new OrderedVirtualCardList(i,function(order,index){
+                this.requireList.push({order,index});
+                //manage repetitive item
+                //manage async item
+            });
+        }
+    }
+
     /**
      * resize
      * @param width set container width
@@ -53,7 +67,9 @@ class VirtualCardList {
      * @param scroll
      */
     setScroll(scroll){
-        this.calculate();
+        // this.calculate();
+        //we should scroll every row and get their pull request for loading and make empty template
+        //let the pull request passes and make cards empty card loading
     }
 
     elementPosition={};
@@ -108,3 +124,20 @@ class VirtualCardList {
     }
 }
 export default VirtualCardList;
+
+class OrderedVirtualCardList {
+    constructor(getItemAtIndex) {
+        this.container = {
+            rect: [],
+            minIndex: 0,
+            maxIndex: 'infinite',
+        };
+        this.cardsPosotion=[];
+        this.window = {
+            rect: [],
+        };
+        this.getItemRect = () => {};
+        this.getItemAtIndex=getItemAtIndex;
+        this.scrollChange = () => {};//overided scoll event || container scroll event
+    }
+}

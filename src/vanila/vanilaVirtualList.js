@@ -1,21 +1,28 @@
-// import VirtualCardList from '../virtualCardList';
+import VirtualCardList from '../virtualCardList';
+
 class VanilaVirtualList{
-    constructor(element,options,dataProvider){
-        this.dataProvider=dataProvider||function(index){
-            return {
-                content:index,
-                className:"item",
-            }
-        };
-        this.scrollContainer = document.createElement('div');
-        this.scrollContainer.style.cssText="position:relative;overflow:auto;";
-        element.appendChild(this.scrollContainer);
+    constructor(parentElement,dataProvider,scrollElement) {
+        this.dataProvider = dataProvider || function (index) {
+                return {
+                    content: index,
+                    className: "item",
+                }
+            };
+        this.scrollContainer = scrollElement || parentElement;
 
         this.cardsContainer = document.createElement('div');
-        this.cardsContainer.style.cssText="position:absolute;";
-        this.scrollContainer.appendChild(this.cardsContainer);
-
+        this.cardsContainer.style.cssText="position:relative;";
+        parentElement.appendChild(this.cardsContainer);
+        this.virtualList=new VirtualCardList({
+            layout: {ltsm: "col", gtsm: "row"},
+            startIndex: 0,
+            size: {width:this.scrollContainer.width,height:this.scrollContainer.height}
+        });
         this.startIndex=0;
+
+        this.scrollContainer.onscroll = (scrollTop) => {
+            this.virtualList.setScroll(scrollTop);
+        }
     }
     //this method could override
     cardGenerator({content,className}){
