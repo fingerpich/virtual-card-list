@@ -1,6 +1,8 @@
+import VirtualCardSequence from 'virtualCardSequence';
 /**
- * is a class to manage list with
+ * is a class to manage some card sequence together
  */
+
 class VirtualCardList {
     /**
      * constructor
@@ -14,13 +16,13 @@ class VirtualCardList {
         this.maxColumn=5;
     }
 
-    cardList=[];
+    cardSequences=[];
     requireList=[];
 
-    recreateCardLists() {
+    recreateSequences() {
         const columnCount=Math.min(this.maxColumn,Math.floor(this.size/this.childMinWidth));
         for(var i=0;i<columnCount; i++){
-            this.cardList[i] = new OrderedVirtualCardList(i,function(order,index){
+            this.cardSequences[i] = new VirtualCardSequence(i,function(order, index){
                 this.requireList.push({order,index});
                 //manage repetitive item
                 //manage async item
@@ -34,7 +36,8 @@ class VirtualCardList {
      * @param height set container height
      */
     resize(width, height) {
-
+        // after a delay
+        this.recreateSequences();
     }
 
     /**
@@ -42,7 +45,7 @@ class VirtualCardList {
      * @param layout could be 'row' or 'column'
      */
     setLayout(layout) {
-
+        this.recreateSequences();
     }
 
     /**
@@ -50,7 +53,8 @@ class VirtualCardList {
      * @param columnsCount split every row to columns counts
      */
     setColumns(columnsCount) {
-
+        this.maxColumn=columnsCount;
+        this.recreateSequences();
     }
 
     /**
@@ -59,7 +63,10 @@ class VirtualCardList {
      * @param size element new size
      */
     setElementSize(index, size) {
-
+        //TODO: find card sequence and just run it
+        for(var i=0;i<this.cardSequences.length; i++){
+            this.cardSequences[i].changeCardSize(index,size);
+        }
     }
 
     /**
@@ -67,6 +74,9 @@ class VirtualCardList {
      * @param scroll
      */
     setScroll(scroll){
+        for(var i=0;i<this.cardSequences.length; i++){
+            this.cardSequences[i].scrollChange(scroll);
+        }
         // this.calculate();
         //we should scroll every row and get their pull request for loading and make empty template
         //let the pull request passes and make cards empty card loading
@@ -77,27 +87,7 @@ class VirtualCardList {
      * calculate and find every elements css
      */
     calculate({getElementHeight}) {
-        const col=Math.min(this.maxColumn,Math.floor(this.size/this.childMinWidth));
-        const width=this.size[0];
-        const elementWidth=width/col;
-        const colsElements=[];
-        const colsTop=this.getColsTop(col);
-        let index=this.startIndex;
-        const elPos=this.elementPosition;
-        let smallestCol=this.getSmallestCol(colsTop);
-        while(this.needToLoadMore(colsTop[smallestCol])){
-            if(!elPos[index])elPos[index]={};
-            const eliPos=elPos[index];
 
-            eliPos.top = colsTop[smallestCol];
-            eliPos.left = smallestCol * elementWidth;
-            eliPos.width = elementWidth;
-            eliPos.height = getElementHeight?getElementHeight(index):this.childAvgSize;
-            colsTop[smallestCol]+=eliPos.height;
-            index++;
-            smallestCol=this.getSmallestCol(colsTop);
-        }
-        return this.elementPosition;
     }
     getSmallestCol(colsTop){
         let min=0;
@@ -124,20 +114,3 @@ class VirtualCardList {
     }
 }
 export default VirtualCardList;
-
-class OrderedVirtualCardList {
-    constructor(getItemAtIndex) {
-        this.container = {
-            rect: [],
-            minIndex: 0,
-            maxIndex: 'infinite',
-        };
-        this.cardsPosotion=[];
-        this.window = {
-            rect: [],
-        };
-        this.getItemRect = () => {};
-        this.getItemAtIndex=getItemAtIndex;
-        this.scrollChange = () => {};//overided scoll event || container scroll event
-    }
-}
